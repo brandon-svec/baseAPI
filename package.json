@@ -1,0 +1,26 @@
+{
+  "name": "baseAPI",
+  "version": "0.0.1",
+  "description": "",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js",
+    "test": "mocha ./test/ --recorder spec --exit --bail"
+  },
+  "author": "brandon.svec@gmail.com",
+  "license": "UNLICENSED",
+  "dependencies": {
+    "ajv": "^6.5.4",
+    "async": "^2.6.1",
+    "body-parser": "^1.18.3",
+    "config": "^2.0.1",
+    "express": "^4.16.4",
+    "node-uuid": "^1.4.8",
+    "pino": "^5.8.0"
+  },
+  "devDependencies": {
+    "chai": "^4.2.0",
+    "mocha": "^5.2.0",
+    "supertest": "^3.3.0"
+  }
+}

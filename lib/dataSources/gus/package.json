@@ -1,0 +1,15 @@
+{
+  "name": "penny_gus",
+  "version": "0.0.1",
+  "description": "",
+  "main": "app.js",
+  "scripts": {
+    "test": " mocha ./test/ --recorder spec --exit --bail"
+  },
+  "author": "bsvec@salesforce.com",
+  "license": "UNLICENSED",
+  "dependencies": {
+    "ajv": "^6.5.4",
+    "jsforce": "^1.9.1"
+  }
+}
