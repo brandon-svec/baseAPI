@@ -4,7 +4,7 @@
 
 var config = {};
 
-config.applicationName = 'penny';
+config.applicationName = 'baseAPI';
 
 // HTTP Proxy
 
