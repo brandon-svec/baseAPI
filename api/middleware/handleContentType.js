@@ -20,9 +20,7 @@ function fn_run (req, res, next) {
     var output = req.databag['output'];
     output.message = 'Request Failed';
     output.error = 'Content-Type Must be application/json';
-    res.status(400).send(output);
-    return false;
+    return res.status(400).send(output);
   }
-  next();
-  return true;
+  return next();
 }

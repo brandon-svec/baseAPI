@@ -22,15 +22,15 @@ var server = null;
 
 // Start
 
-fn_init();
+init();
 
 // Functions
 
-function fn_init () {
+function init () {
   log.info('Starting Service...');
 
   async.waterfall([
-    fn_init_HTTPserver
+    initHTTPserver
   ],
   function (err, result) {
     if (err) {
@@ -41,7 +41,7 @@ function fn_init () {
   });
 }
 
-function fn_init_HTTPserver (cb) {
+function initHTTPserver (cb) {
   if (server) {
     server.close();
   }
@@ -68,7 +68,7 @@ function fn_init_HTTPserver (cb) {
       log.info('HTTP Server Success');
     }
 
-    cb(err);
+    return cb(err);
   });
   server.timeout = 0;
 }

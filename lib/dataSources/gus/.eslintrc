@@ -1,7 +1,0 @@
-{
-    "extends": "semistandard",
-    "rules": {
-      "camelcase": "off",
-      "no-func-assign": "off"
-    }
-  }

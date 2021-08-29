@@ -24,13 +24,13 @@ function fn_run (req, res, next) {
 
   var global = req.app.locals;
 
-  req.databag = {};
-  req.databag.logData = {};
-  req.databag.rw_logData = {
-    attributes: {},
-    timings: {},
-    counters: {},
-    gauges: {}
+  req.databag = {
+    output: {
+      message: ''
+    },
+    databag: {
+      logData: {}
+    }
   };
 
   req.requestTime = Date.now();
@@ -47,7 +47,7 @@ function fn_run (req, res, next) {
   res.on('error', fn_response_processError);
 
   // HTTP Connection Closed
-  res.on('close', fn_response_processClose);
+  res.on('abort', fn_response_processClose);
 
   // HTTP Transaction Finished
   if (global.statsClient) {
