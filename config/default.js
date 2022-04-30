@@ -2,7 +2,7 @@
 
 // General
 
-var config = {};
+const config = {};
 
 config.applicationName = 'baseAPI';
 

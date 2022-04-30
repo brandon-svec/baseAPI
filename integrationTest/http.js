@@ -12,15 +12,15 @@ const webServerConfig = require(path.resolve('lib', 'webserver.js'));
 
 const log = pino(config.get('logging'));
 
-var app = webServerConfig.GetWebServerConfig(config, log);
+const app = webServerConfig.GetWebServerConfig(config, log);
 
-var client = null;
+let client = null;
 
-function fn_init () {
+function init () {
   log.info('Starting Service...');
 
   async.waterfall([
-    fn_init_HTTPserver
+    initHTTPserver
   ],
   function (err, result) {
     if (err) {
@@ -31,14 +31,14 @@ function fn_init () {
   });
 }
 
-function fn_init_HTTPserver (cb) {
+function initHTTPserver (cb) {
   client = mockServer(app);
   setImmediate(cb);
 }
 
-before(fn_init);
-
 describe('HTTP Routes', function () {
+  before(init);
+
   describe('MakeCall', function () {
     it('Makes a call to github', function (done) {
       client
@@ -46,8 +46,8 @@ describe('HTTP Routes', function () {
         .expect(200)
         .end(function (err, res) {
           assert.isNull(err);
-          assert.isNotNull(res.text);
-          assert.isTrue(res.text.startsWith('<!doctype html><html itemscope="" itemtype="http://schema.org/WebPage" lang="en"><head><meta content="Search the world'));
+          assert.isObject(res.body);
+          assert.isTrue(res.body.data.startsWith('<!doctype html><html itemscope="" itemtype="http://schema.org/WebPage" lang="en"><head><meta content="Search the world'));
           done();
         });
     });

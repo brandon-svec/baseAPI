@@ -30,25 +30,24 @@ function Ping (req, res, next) {
 }
 
 function Mirror (req, res, next) {
-  if (req.query['strict'] === 'true') {
-    let schemaCheck = ajv.validate(mirrorSchema, req.body);
+  if (req.query.strict === 'true') {
+    const schemaCheck = ajv.validate(mirrorSchema, req.body);
 
     if (!schemaCheck) {
-      let output = req.databag['output'];
-      output.message = 'Request Failed';
-      output.error = ajv.errors[0].dataPath + ' ' + ajv.errors[0].message + ' - ' + JSON.stringify(ajv.errors[0].params);
-      return res.status(400).send(output);
+      return res.sendWrappedFailure(new Error(ajv.errors[0].dataPath + ' ' + ajv.errors[0].message + ' - ' + JSON.stringify(ajv.errors[0].params)));
     }
+
+    return res.sendWrappedSuccess({ mirror: req.body });
   }
 
-  return res.status(200).send(req.body);
+  return res.sendWrappedSuccess({ mirror: req.body });
 }
 
 function MakeCall (req, res, next) {
-  makeCall.RequestPong(req.params['foo'], function (err, body) {
+  makeCall.RequestPong(req.params.foo, function (err, body) {
     if (err) {
-      return res.status(500).send(err.message);
+      return res.sendWrappedError(err);
     }
-    return res.status(200).send(body);
+    return res.sendWrappedSuccess({ data: body });
   });
 }

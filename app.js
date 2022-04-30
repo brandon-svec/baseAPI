@@ -16,9 +16,9 @@ const log = pino(config.get('logging'));
 
 // Express
 
-var app = webServerConfig.GetWebServerConfig(config, log);
+const app = webServerConfig.GetWebServerConfig(config, log);
 
-var server = null;
+let server = null;
 
 // Start
 
@@ -47,7 +47,7 @@ function initHTTPserver (cb) {
   }
 
   // SSL HTTP Server
-  var sslOptions = null;
+  let sslOptions = null;
   if (config.get('ssl')) {
     sslOptions = {
       pfx: fs.readFileSync(config.get('ssl.pfx')),
