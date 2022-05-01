@@ -4,7 +4,7 @@
 
 const config = {
   http: {
-    timeout: 10
+    timeout: 30000
   }
 };
 

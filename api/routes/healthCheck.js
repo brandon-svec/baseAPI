@@ -1,3 +1,4 @@
 module.exports = function (req, res, next) {
-  return res.sendStatus(200);
+  res.setHeader('Content-type', 'text/html');
+  return res.send('OK');
 };
