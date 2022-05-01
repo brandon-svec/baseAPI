@@ -1,4 +1,4 @@
-process.env.NODE_ENV = 'test';
+process.env.NODE_ENV = 'integrationTest';
 process.env.NODE_CONFIG_DIR = './config/';
 
 const assert = require('chai').assert;
@@ -22,12 +22,7 @@ function init () {
   async.waterfall([
     initHTTPserver
   ],
-  function (err, result) {
-    if (err) {
-      log.error('Service Failed to Start');
-    } else {
-      log.info('Service Started');
-    }
+  function () {
   });
 }
 

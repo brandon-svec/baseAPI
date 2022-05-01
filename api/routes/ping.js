@@ -26,7 +26,20 @@ module.exports = {
 };
 
 function Ping (req, res, next) {
-  return res.status(200).send('Pong');
+  res.addLogData('startTime', res.databag.startTime);
+  res.addAttribute('Sport', 'Table Tennis');
+
+  if (req.query.doubleSend) {
+    res.sendWrappedSuccess();
+  }
+
+  if (req.query.doubleError) {
+    res.status(501);
+    res.sendWrappedError(new Error('Something Broke'));
+    return res.sendWrappedError(new Error('Something Broke'));
+  }
+
+  return res.sendWrappedSuccess({ data: 'Pong' });
 }
 
 function Mirror (req, res, next) {
@@ -44,7 +57,9 @@ function Mirror (req, res, next) {
 }
 
 function MakeCall (req, res, next) {
+  const startTime = Date.now();
   makeCall.RequestPong(req.params.foo, function (err, body) {
+    res.addTelemetry('RequestPong', Date.now() - startTime);
     if (err) {
       return res.sendWrappedError(err);
     }

@@ -57,10 +57,28 @@ describe('HTTP Routes', function () {
           .expect(200)
           .end(function (err, res) {
             assert.isNull(err);
-            assert.isNotNull(res.text);
-            assert.equal(res.text, 'Pong');
+            assert.isObject(res.body);
+            assert.equal(res.body.data, 'Pong');
             done();
           });
+      });
+
+      it('Double returns', function (done) {
+        client
+          .get('/ping')
+          .query({
+            doubleSend: 'test'
+          })
+          .expect(200, done);
+      });
+
+      it('Double Throws error', function (done) {
+        client
+          .get('/ping')
+          .query({
+            doubleError: 'test'
+          })
+          .expect(501, done);
       });
     });
 
@@ -151,6 +169,44 @@ describe('HTTP Routes', function () {
             done();
           });
       });
+
+      it('Bad content-type', function (done) {
+        client
+          .post('/mirror')
+          .set('Content-type', 'text')
+          .send('input')
+          .expect(400)
+          .end(function (err, res) {
+            assert.isNull(err);
+            assert.isNotNull(res.body);
+            assert.isObject(res.body);
+            assert.isNotNull(res.body.message);
+            assert.isNotNull(res.body.error);
+            assert.equal(res.body.message, 'Request Failed');
+            // eslint-disable-next-line
+            assert.equal(res.body.error, 'Content-Type must be application/json');
+            done();
+          });
+      });
+
+      it('Bad content-type', function (done) {
+        client
+          .post('/mirror')
+          .set('Content-type', 'text')
+          .send('input')
+          .expect(400)
+          .end(function (err, res) {
+            assert.isNull(err);
+            assert.isNotNull(res.body);
+            assert.isObject(res.body);
+            assert.isNotNull(res.body.message);
+            assert.isNotNull(res.body.error);
+            assert.equal(res.body.message, 'Request Failed');
+            // eslint-disable-next-line
+            assert.equal(res.body.error, 'Content-Type must be application/json');
+            done();
+          });
+      });
     });
 
     describe('MakeCall', function () {
@@ -168,6 +224,44 @@ describe('HTTP Routes', function () {
             assert.isNull(err);
             assert.isObject(res.body);
             assert.equal(res.body.data, 'Hello World!');
+            stub.restore();
+            done();
+          });
+      });
+
+      it('Throws a call to github', function (done) {
+        const stub = sinon.stub(makeCall, 'RequestPong').callsFake(function (inputUrl, cb) {
+          assert.equal(inputUrl, 'testUrl.local');
+
+          return setImmediate(cb, new Error('Something broke'));
+        });
+
+        client
+          .get('/makeCall/testUrl.local')
+          .expect(500)
+          .end(function (err, res) {
+            assert.isNull(err);
+            assert.isObject(res.body);
+            assert.equal(res.body.error, 'Something broke');
+            stub.restore();
+            done();
+          });
+      });
+
+      it('Throws timeout', function (done) {
+        const stub = sinon.stub(makeCall, 'RequestPong').callsFake(function (inputUrl, cb) {
+          assert.equal(inputUrl, 'testUrl.local');
+
+          return setTimeout(cb, 2000, new Error('Something broke'));
+        });
+
+        client
+          .get('/makeCall/testUrl.local')
+          .expect(408)
+          .end(function (err, res) {
+            assert.isNull(err);
+            assert.isObject(res.body);
+            assert.equal(res.body.error, `Request Timeout. Exceeded ${config.get('http.timeout')} ms.`);
             stub.restore();
             done();
           });
