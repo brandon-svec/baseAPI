@@ -16,6 +16,9 @@
     "test": "npm run test:unit && npm run test:integration"
   },
   "author": "brandon-svec",
+  "engines": {
+    "node": ">=16 <18"
+  },
   "license": "UNLICENSED",
   "dependencies": {
     "ajv": "6.12.6",
